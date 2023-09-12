@@ -85,3 +85,18 @@
     font-size: 30px;
     cursor: pointer;
 }
+
+.btn-reset{
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    transform: translate(-100px);
+    padding: 20px 40px;
+    border-radius: 25px;
+    background-color: transparent;
+    border: 5px dotted green;
+    color:green;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 30px;
+}
