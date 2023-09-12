@@ -1,7 +1,8 @@
-
 let fieldPlayground = document.querySelector(".playground");
-let countRight = document.querySelector(".count_right")
-let countLeft = document.querySelector(".count_left")
+let countRight = document.querySelector(".count_right");
+let countLeft = document.querySelector(".count_left");
+
+let btnResert = document.querySelector(".btn-reset");
 
 let fieldHeight = 600;
 let fieldWidth = 800;
@@ -20,7 +21,7 @@ let gameObj = {
     },
     set x(value){
         this.rect.x = value;
-        this.rect.left = value-this.rect.width/2
+        this.rect.left = value - this.rect.width/2;
         this.el.style.left = (this.rect.left) + "px";
     },
 
@@ -29,8 +30,8 @@ let gameObj = {
     },
     set y(value){
         this.rect.y = value;
-        this.rect.top = value-this.rect.height/2
-        this.el.style.top = (this.rect.top) +"px"
+        this.rect.top = value - this.rect.height/2;
+        this.el.style.top = (this.rect.top) + "px";
     },
 
     get bottom(){
@@ -40,13 +41,12 @@ let gameObj = {
         return this.rect.x + this.rect.width / 2;
     },
     collideWith: function(obj){
-        //console.log(this.rect.left, obj.right)
         return (this.bottom > obj.rect.top &&
              this.right > obj.rect.left && 
              this.rect.left < obj.right && 
-             this.rect.top < obj.bottom)
+             this.rect.top < obj.bottom);
     }
-}
+};
 
 let ball = {
     __proto__: gameObj,
@@ -69,7 +69,7 @@ let ball = {
         this.y += this.velocityY;
         
         if (this.rect.top < 0 || this.bottom > fieldHeight) {
-            this.velocityY = - this.velocityY;
+            this.velocityY = -this.velocityY;
         }
     
         if (this.collideWith(paddleLeft)) {
@@ -109,16 +109,16 @@ let ball = {
         let smartLevel = 0.3;
     
         if (deltaY > 0) {
-            // Мяч находится выше платформы
             paddleRight.y += Math.min(smartLevel * deltaY, 5);
         } else if (deltaY < 0) {
-            // Мяч находится ниже платформы
             paddleRight.y -= Math.min(smartLevel * -deltaY, 5); 
         }
 
+        // Вызываем функцию сохранения данных после каждого обновления мяча
+        saveGameData()
     },
     reset: function(){
-        this.x = 400;
+        this.x = 430;
         this.y = 300;
         this.velocityX = 5;
         this.velocityY = 5;
@@ -131,13 +131,13 @@ let ball = {
             this.timerId = 0;
         }
         else{
-        this.timerId = setInterval(this.update.bind(this), 25)
+            this.timerId = setInterval(this.update.bind(this), 25);
         }   
     }
-}
+};
 
 let btnStart = document.querySelector(".btn-wrapper > .btn-start");
-let btnStop = document.querySelector(".btn-wrapper > .btn-end")
+let btnStop = document.querySelector(".btn-wrapper > .btn-end");
 
 //левая сторона
 let paddleLeft = {
@@ -151,8 +151,7 @@ let paddleLeft = {
         width: 20,
         height: 120,
     }, 
-}
-
+};
 
 //правая сторона
 let paddleRight = {
@@ -166,25 +165,58 @@ let paddleRight = {
         width: 20,
         height: 120,
     }, 
-}
+};
 
 // движение мышки
 document.addEventListener("mousemove", function(e){
-    //console.log(e);
     let playRect = fieldPlayground.getBoundingClientRect();
     let y = e.clientY - playRect.top - 20;
-    //console.log(y);
     paddleLeft.y = y;
 });
 
-
 document.addEventListener("keyup", function(e){
-    console.log(e);
     if(e.keyCode == 83){
-        ball.start()    
-        console.log(ball.timerId, ball.rect.x, ball.rect.y)
+        ball.start();
     }
-})  
+});
 
+// Установка значений счётчиков и текущего положения мяч
+function saveGameData() {
+    localStorage.setItem("countRight", countRight.dataset.value);
+    localStorage.setItem("countLeft", countLeft.dataset.value);
+    localStorage.setItem("ballX", ball.x);
+    localStorage.setItem("ballY", ball.y);
+}
 
+// Получение значений из localStorage и установка их при загрузке страницы
+function loadGameData() {
+    const savedCountRight = localStorage.getItem("countRight");
+    if (savedCountRight !== null) {
+        countRight.dataset.value = savedCountRight;
+    }
 
+    const savedCountLeft = localStorage.getItem("countLeft");
+    if (savedCountLeft !== null) {
+        countLeft.dataset.value = savedCountLeft;
+    }
+
+    const savedBallX = localStorage.getItem("ballX");
+    const savedBallY = localStorage.getItem("ballY");
+    if (savedBallX !== null && savedBallY !== null) {
+        ball.x = parseFloat(savedBallX);
+        ball.y = parseFloat(savedBallY);
+    }
+}
+
+window.addEventListener("DOMContentLoaded", function() {
+    loadGameData();
+});
+//сброс данных
+btnResert.addEventListener("click", ()=> {
+    countRight.dataset.value = "0";  
+    countLeft.dataset.value = "0";
+    ball.x = 420
+    ball.y = 300
+    ball.start();
+    saveGameData()
+})
