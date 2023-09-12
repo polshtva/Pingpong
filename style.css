@@ -1,0 +1,87 @@
+/* поле игры */
+.playground{
+    min-width: 800px;
+    height: 600px;
+    background-image: url(./img/fon.jpg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-left: 10px double red;
+    border-right: 10px double red;
+}
+
+
+.playground::before{
+    display: block;
+    width: 0;
+    height: 100%;
+    content: "";
+    border-right: 10px dashed white;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-5px);
+}
+.pad{
+    width: 20px;
+    height: 160px;
+    background-color: white;
+    margin: 10px;
+    position: absolute;
+    top: 0;
+}
+
+.pad_left{
+    left: 0; 
+}
+
+.pad_right{
+    right: 0;
+    top: 240px;
+}
+.ball{
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-20px,-20px);
+    border-radius: 50%;
+    box-shadow: 0 0 10px black;
+}
+
+.count{
+    position: absolute;
+    bottom: 80%;
+    transform: translateX(-50%);
+}
+
+.count_left{
+    left: 25%
+}
+.count_right{
+    left: 75%
+}
+.count::after{
+    content:attr(data-value);
+    color: white;
+    opacity: 0.7;    
+    font: 600 80px Sans-serif;
+}
+
+.btn-wrapper{
+    display: none;
+}
+
+.btn{
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 5px dotted white;
+    background-color: green;
+    opacity: 0.8;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
